@@ -23,6 +23,7 @@ Remaking a working full stack AlzGuard from scratch to review good coding princi
 
 ### Backend
 - Takes form data and feeds it into ML pipeline
+- Gets ML output and returns to frontend
 - Uses FastAPI
 
 ### ML
