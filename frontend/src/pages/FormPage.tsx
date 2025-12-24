@@ -1,0 +1,29 @@
+import React, { useState } from "react";
+
+const FormPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log(email, password);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>Email:</label>
+      <input value={email} onChange={(e) => setEmail(e.target.value)} />
+
+      <label>Password:</label>
+      <input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+
+      <button type="submit">Submit</button>
+    </form>
+  );
+};
+
+export default FormPage;
