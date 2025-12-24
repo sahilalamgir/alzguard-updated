@@ -11,16 +11,28 @@ const FormPage = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>Email:</label>
-      <input value={email} onChange={(e) => setEmail(e.target.value)} />
-
-      <label>Password:</label>
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-
+      <div>
+        <label className="" htmlFor="email">
+          Email:
+        </label>
+        <input
+          type="text"
+          id="email"
+          name="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
+      <div>
+        <label htmlFor="password">Password:</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </div>
       <button type="submit">Submit</button>
     </form>
   );

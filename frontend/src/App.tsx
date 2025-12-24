@@ -1,4 +1,4 @@
-import FormPage from "./pages/FormPage.tsx";
+import FormPage from "./pages/FormPage";
 import "./App.css";
 
 function App() {
