@@ -7,6 +7,7 @@ import Step4Form from "./steps/Step4Form";
 interface Props {
   currentStep: number;
   formData: any;
+  isCurrentStepValid: () => boolean;
   onNext: () => void;
   onBack: () => void;
   onChange: (field: string, value: any) => void;
@@ -17,6 +18,7 @@ interface Props {
 const MultiStepForm = ({
   currentStep,
   formData,
+  isCurrentStepValid,
   onNext,
   onBack,
   onChange,
@@ -50,7 +52,12 @@ const MultiStepForm = ({
           Back
         </button>
         {currentStep < 4 ? (
-          <button type="button" onClick={onNext} className="btn-primary">
+          <button
+            type="button"
+            onClick={onNext}
+            disabled={!isCurrentStepValid()}
+            className="btn-primary disabled:bg-slate-300 disabled:text-slate-600 disabled:cursor-not-allowed disabled:opacity-60"
+          >
             Next
           </button>
         ) : (

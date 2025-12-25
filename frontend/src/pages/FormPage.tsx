@@ -34,6 +34,31 @@ const FormPage = () => {
       setFormData((prev) => ({ ...prev, [field]: [...prev[field], value] }));
     }
   };
+  const isCurrentStepValid = () => {
+    return (
+      (currentStep === 1 && isStep1Valid()) ||
+      (currentStep === 2 && isStep2Valid()) ||
+      (currentStep === 3 && isStep3Valid())
+    );
+  };
+  const isStep1Valid = () => {
+    return !(
+      formData.age === "" ||
+      formData.sex === "" ||
+      formData.educationLevel === "" ||
+      formData.primaryLanguage === ""
+    );
+  };
+  const isStep2Valid = () => {
+    return !(formData.familyHistory === "" || formData.smokingHistory === "");
+  };
+  const isStep3Valid = () => {
+    return !(
+      formData.memoryIssues === "" ||
+      formData.conversationalIssues === "" ||
+      formData.misplacementIssues === ""
+    );
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,6 +79,7 @@ const FormPage = () => {
       <MultiStepForm
         currentStep={currentStep}
         formData={formData}
+        isCurrentStepValid={isCurrentStepValid}
         onNext={handleNext}
         onBack={handleBack}
         onChange={handleChange}

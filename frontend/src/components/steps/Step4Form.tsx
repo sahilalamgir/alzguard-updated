@@ -9,7 +9,7 @@ const Step4Form = ({ formData }: Props) => {
         Step 4: Review &amp; Submit
       </h2>
       <div>
-        <h2 className="text-xl text-text-primary font-semibold mb-6">
+        <h2 className="text-xl text-text-primary font-semibold mb-3">
           About You
         </h2>
         <p className="form-label">Age: {formData.age}</p>
@@ -20,7 +20,7 @@ const Step4Form = ({ formData }: Props) => {
         </p>
       </div>
       <div>
-        <h2 className="text-xl text-text-primary font-semibold mb-6">
+        <h2 className="text-xl text-text-primary font-semibold mb-3">
           Health Background
         </h2>
         <p className="form-label">Family history: {formData.familyHistory}</p>
@@ -35,7 +35,7 @@ const Step4Form = ({ formData }: Props) => {
         <p className="form-label">Smoking history: {formData.smokingHistory}</p>
       </div>
       <div>
-        <h2 className="text-xl text-text-primary font-semibold mb-6">
+        <h2 className="text-xl text-text-primary font-semibold mb-3">
           Cognitive Experience
         </h2>
         <p className="form-label">Memory issues: {formData.memoryIssues}</p>
