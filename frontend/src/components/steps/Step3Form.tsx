@@ -10,51 +10,60 @@ const Step3Form = ({ formData, onChange }: Props) => {
         Step 3: Cognitive Experience
       </h2>
       <div>
-        <label htmlFor="familyHistory" className="form-label">
-          Does your family have history of Alzheimer's or dementia?:
+        <label htmlFor="memoryIssues" className="form-label">
+          Have you noticed increased memory lapses in the past 12 months?:
         </label>
-        <input
-          type="text" // dropdown
-          value={formData.familyHistory}
-          onChange={(e) => onChange("familyHistory", e.target.value)} // can't go below 0
+        <select // dropdown
+          name="memoryIssues"
+          id="memoryIssues"
+          value={formData.memoryIssues}
+          onChange={(e) => onChange("memoryIssues", e.target.value)}
           className="form-input"
-        ></input>
+        >
+          <option value="">Select an option</option>
+          <option value="never">Never</option>
+          <option value="sometimes">Sometimes</option>
+          <option value="often">Often</option>
+          <option value="very">Very often</option>
+        </select>
       </div>
 
       <div>
-        <label htmlFor="familyHistory" className="form-label">
-          What is your sex?:
+        <label htmlFor="conversationalIssues" className="form-label">
+          Do you find it harder to follow conversations than before?:
         </label>
-        <input
-          type="text"
-          value={formData.sex}
-          onChange={(e) => onChange("sex", e.target.value)}
+        <select // dropdown
+          name="conversationalIssues"
+          id="conversationalIssues"
+          value={formData.conversationalIssues}
+          onChange={(e) => onChange("conversationalIssues", e.target.value)}
           className="form-input"
-        ></input>
+        >
+          <option value="">Select an option</option>
+          <option value="never">Never</option>
+          <option value="sometimes">Sometimes</option>
+          <option value="often">Often</option>
+          <option value="very">Very often</option>
+        </select>
       </div>
 
       <div>
-        <label htmlFor="familyHistory" className="form-label">
-          What is your education level?:
+        <label htmlFor="misplacementIssues" className="form-label">
+          Do you misplace items more frequently?:
         </label>
-        <input // dropdown
-          type="text"
-          value={formData.educationLevel}
-          onChange={(e) => onChange("educationLevel", e.target.value)}
+        <select // dropdown
+          name="misplacementIssues"
+          id="misplacementIssues"
+          value={formData.misplacementIssues}
+          onChange={(e) => onChange("misplacementIssues", e.target.value)}
           className="form-input"
-        ></input>
-      </div>
-
-      <div>
-        <label htmlFor="familyHistory" className="form-label">
-          What is your primary language?:
-        </label>
-        <input // dropdown
-          type="text"
-          value={formData.primaryLanguage}
-          onChange={(e) => onChange("primaryLanguage", e.target.value)}
-          className="form-input"
-        ></input>
+        >
+          <option value="">Select an option</option>
+          <option value="never">Never</option>
+          <option value="sometimes">Sometimes</option>
+          <option value="often">Often</option>
+          <option value="very">Very often</option>
+        </select>
       </div>
     </div>
   );
