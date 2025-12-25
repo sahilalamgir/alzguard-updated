@@ -11,10 +11,7 @@ const Step2Form = ({ formData, onChange, onCheckboxChange }: Props) => {
         Step 2: Health Background
       </h2>
       <div>
-        <label
-          htmlFor="familyHistory"
-          className="text-text-primary text-base block font-normal mb-2"
-        >
+        <label htmlFor="familyHistory" className="form-label">
           Does your family have history of Alzheimer's or dementia?:
         </label>
         <select
@@ -22,7 +19,7 @@ const Step2Form = ({ formData, onChange, onCheckboxChange }: Props) => {
           id="familyHistory"
           value={formData.familyHistory}
           onChange={(e) => onChange("familyHistory", e.target.value)} // can't go below 0
-          className="w-full max-w-xs border border-gray-300 rounded-md px-4 py-2 text-base focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-200"
+          className="form-input"
         >
           <option value="">Select an option</option>
           <option value="yes">Yes</option>
@@ -43,7 +40,7 @@ const Step2Form = ({ formData, onChange, onCheckboxChange }: Props) => {
               onCheckboxChange("diseaseHistory", "cardiovascular")
             }
             checked={formData.diseaseHistory.includes("cardiovascular")}
-            className="mr-2 h-4 w-4 text-accent focus:ring-accent"
+            className="form-checkbox"
           ></input>
           <label htmlFor="cardiovascular">Cardiovascular disease</label>
         </div>
@@ -55,7 +52,7 @@ const Step2Form = ({ formData, onChange, onCheckboxChange }: Props) => {
             value="diabetes"
             onChange={() => onCheckboxChange("diseaseHistory", "diabetes")}
             checked={formData.diseaseHistory.includes("diabetes")}
-            className="mr-2 h-4 w-4 text-accent focus:ring-accent"
+            className="form-checkbox"
           ></input>
           <label htmlFor="diabetes">Diabetes</label>
         </div>
@@ -67,7 +64,7 @@ const Step2Form = ({ formData, onChange, onCheckboxChange }: Props) => {
             value="stroke"
             onChange={() => onCheckboxChange("diseaseHistory", "stroke")}
             checked={formData.diseaseHistory.includes("stroke")}
-            className="mr-2 h-4 w-4 text-accent focus:ring-accent"
+            className="form-checkbox"
           ></input>
           <label htmlFor="stroke">Stroke</label>
         </div>
@@ -79,40 +76,28 @@ const Step2Form = ({ formData, onChange, onCheckboxChange }: Props) => {
             value="depression"
             onChange={() => onCheckboxChange("diseaseHistory", "depression")}
             checked={formData.diseaseHistory.includes("depression")}
-            className="mr-2 h-4 w-4 text-accent focus:ring-accent"
+            className="form-checkbox"
           ></input>
           <label htmlFor="depression">Depression</label>
         </div>
       </fieldset>
 
       <div>
-        <label
-          htmlFor="familyHistory"
-          className="text-text-primary text-base block font-normal mb-2"
-        >
-          What is your education level?:
+        <label htmlFor="smokingHistory" className="form-label">
+          What is your smoking history?:
         </label>
-        <input // dropdown
-          type="text"
-          value={formData.educationLevel}
-          onChange={(e) => onChange("educationLevel", e.target.value)}
-          className="w-full max-w-xs border border-gray-300 rounded-md px-4 py-2 text-base focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-200"
-        ></input>
-      </div>
-
-      <div>
-        <label
-          htmlFor="familyHistory"
-          className="text-text-primary text-base block font-normal mb-2"
+        <select // dropdown
+          name="smokingHistory"
+          id="smokingHistory"
+          value={formData.smokingHistory}
+          onChange={(e) => onChange("smokingHistory", e.target.value)}
+          className="form-input"
         >
-          What is your primary language?:
-        </label>
-        <input // dropdown
-          type="text"
-          value={formData.primaryLanguage}
-          onChange={(e) => onChange("primaryLanguage", e.target.value)}
-          className="w-full max-w-xs border border-gray-300 rounded-md px-4 py-2 text-base focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-200"
-        ></input>
+          <option value="">Select an option</option>
+          <option value="never">Never</option>
+          <option value="former">Former</option>
+          <option value="current">Current</option>
+        </select>
       </div>
     </div>
   );

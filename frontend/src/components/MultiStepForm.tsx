@@ -42,7 +42,7 @@ const MultiStepForm = ({
 
       <div className="flex justify-between mt-8">
         <button
-          className="bg-accent text-text-primary hover:bg-accent-hover disabled:bg-slate-300 disabled:text-slate-600 disabled:cursor-not-allowed disabled:opacity-60 px-6 py-3 rounded-md transition-colors duration-200"
+          className="btn-primary disabled:bg-slate-300 disabled:text-slate-600 disabled:cursor-not-allowed disabled:opacity-60"
           type="button"
           onClick={onBack}
           disabled={currentStep === 1}
@@ -50,18 +50,11 @@ const MultiStepForm = ({
           Back
         </button>
         {currentStep < 4 ? (
-          <button
-            type="button"
-            onClick={onNext}
-            className="bg-accent text-text-primary hover:bg-accent-hover px-6 py-3 rounded-md transition-colors duration-200"
-          >
+          <button type="button" onClick={onNext} className="btn-primary">
             Next
           </button>
         ) : (
-          <button
-            type="submit"
-            className="bg-accent text-text-primary hover:bg-accent-hover px-6 py-3 rounded-md transition-colors duration-200 font-semibold"
-          >
+          <button type="submit" className="btn-primary font-semibold">
             Submit
           </button>
         )}
