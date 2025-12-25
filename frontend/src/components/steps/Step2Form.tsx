@@ -33,39 +33,55 @@ const Step2Form = ({ formData, onChange, onCheckboxChange }: Props) => {
 
       <fieldset>
         <legend>What is your medical history?:</legend>
-        {[
-          {
-            name: "Cardiovascular disease",
-            value: "cardiovascular",
-          },
-          {
-            name: "Diabetes",
-            value: "diabetes",
-          },
-          {
-            name: "Stroke",
-            value: "stroke",
-          },
-          {
-            name: "Depression",
-            value: "depression",
-          },
-        ].map(disease => {
-          <div key={disease.value}>
-            hi
-          </div>
-        })}
         <div>
           <input
             type="checkbox"
-            name="medicalHistory"
-            id="medicalHistory"
-            value={formData.medicalHistory}
-            onChange={(e) => onChange("medicalHistory", e.target.value)}
-            checked={formData.medicalHistory.includes("depression")}
-            // className="w-full max-w-xs border border-gray-300 rounded-md px-4 py-2 text-base focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-200"
+            id="cardiovascular"
+            name="cardiovascular"
+            value="cardiovascular"
+            onChange={() =>
+              onCheckboxChange("diseaseHistory", "cardiovascular")
+            }
+            checked={formData.diseaseHistory.includes("cardiovascular")}
+            className="mr-2 h-4 w-4 text-accent focus:ring-accent"
           ></input>
-          <label htmlFor="medicalHistory">Depression</label>
+          <label htmlFor="cardiovascular">Cardiovascular disease</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="diabetes"
+            name="diabetes"
+            value="diabetes"
+            onChange={() => onCheckboxChange("diseaseHistory", "diabetes")}
+            checked={formData.diseaseHistory.includes("diabetes")}
+            className="mr-2 h-4 w-4 text-accent focus:ring-accent"
+          ></input>
+          <label htmlFor="diabetes">Diabetes</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="stroke"
+            name="stroke"
+            value="stroke"
+            onChange={() => onCheckboxChange("diseaseHistory", "stroke")}
+            checked={formData.diseaseHistory.includes("stroke")}
+            className="mr-2 h-4 w-4 text-accent focus:ring-accent"
+          ></input>
+          <label htmlFor="stroke">Stroke</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            id="depression"
+            name="depression"
+            value="depression"
+            onChange={() => onCheckboxChange("diseaseHistory", "depression")}
+            checked={formData.diseaseHistory.includes("depression")}
+            className="mr-2 h-4 w-4 text-accent focus:ring-accent"
+          ></input>
+          <label htmlFor="depression">Depression</label>
         </div>
       </fieldset>
 

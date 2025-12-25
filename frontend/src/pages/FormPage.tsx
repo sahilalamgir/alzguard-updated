@@ -11,7 +11,7 @@ const FormPage = () => {
     primaryLanguage: "",
     // Step 2: Health Background
     familyHistory: "",
-    medicalHistory: [],
+    diseaseHistory: [],
     smokingHistory: "",
     // Step 3: Cognitive Experience
     memoryIssues: "",
@@ -24,8 +24,15 @@ const FormPage = () => {
   const handleChange = (field: string, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
-  const handleCheckboxChange = (field: string, value: any) => {
-    setFormData((prev) => ({ ...prev, [field]: [...formData[field], value] }));
+  const handleCheckboxChange = (field: string, value: string) => {
+    if (formData[field].includes(value)) {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: prev[field].filter((item: string) => item !== value),
+      }));
+    } else {
+      setFormData((prev) => ({ ...prev, [field]: [...prev[field], value] }));
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {

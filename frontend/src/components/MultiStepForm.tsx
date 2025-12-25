@@ -25,20 +25,24 @@ const MultiStepForm = ({
 }: Props) => {
   return (
     <form onSubmit={onSubmit} className="bg-white rounded-lg shadow-md p-8">
-      {currentStep == 1 && (
+      {currentStep === 1 && (
         <Step1Form formData={formData} onChange={onChange} />
       )}
-      {currentStep == 2 && (
-        <Step2Form formData={formData} onChange={onChange} onCheckboxChange={onCheckboxChange} />
+      {currentStep === 2 && (
+        <Step2Form
+          formData={formData}
+          onChange={onChange}
+          onCheckboxChange={onCheckboxChange}
+        />
       )}
-      {currentStep == 3 && (
+      {currentStep === 3 && (
         <Step3Form formData={formData} onChange={onChange} />
       )}
-      {currentStep == 4 && <Step4Form formData={formData} />}
+      {currentStep === 4 && <Step4Form formData={formData} />}
 
       <div className="flex justify-between mt-8">
         <button
-          className="bg-accent text-white hover:bg-accent-hover disabled:bg-slate-300 disabled:text-slate-600 disabled:cursor-not-allowed disabled:opacity-60 px-6 py-3 rounded-md transition-colors duration-200"
+          className="bg-accent text-text-primary hover:bg-accent-hover disabled:bg-slate-300 disabled:text-slate-600 disabled:cursor-not-allowed disabled:opacity-60 px-6 py-3 rounded-md transition-colors duration-200"
           type="button"
           onClick={onBack}
           disabled={currentStep === 1}
@@ -49,14 +53,14 @@ const MultiStepForm = ({
           <button
             type="button"
             onClick={onNext}
-            className="bg-accent text-white hover:bg-accent-hover px-6 py-3 rounded-md transition-colors duration-200"
+            className="bg-accent text-text-primary hover:bg-accent-hover px-6 py-3 rounded-md transition-colors duration-200"
           >
             Next
           </button>
         ) : (
           <button
             type="submit"
-            className="bg-accent text-white hover:bg-accent-hover px-6 py-3 rounded-md transition-colors duration-200 font-semibold"
+            className="bg-accent text-text-primary hover:bg-accent-hover px-6 py-3 rounded-md transition-colors duration-200 font-semibold"
           >
             Submit
           </button>
