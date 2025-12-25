@@ -19,7 +19,11 @@ const FormPage = () => {
     misplacementIssues: "",
   });
 
-  const handleNext = () => setCurrentStep((prev) => prev + 1);
+  const handleNext = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setCurrentStep((prev) => prev + 1);
+  };
   const handleBack = () => setCurrentStep((prev) => prev - 1);
   const handleChange = (field: string, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -59,10 +63,9 @@ const FormPage = () => {
       formData.misplacementIssues === ""
     );
   };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(currentStep, formData);
+    console.log("formData:", formData);
   };
 
   return (

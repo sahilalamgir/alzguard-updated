@@ -22,7 +22,7 @@ const Step1Form = ({ formData, onChange }: Props) => {
           value={formData.age}
           onChange={(e) =>
             onChange("age", Number(e.target.value) < 0 ? 0 : e.target.value)
-          } // can't go below 0
+          }
           className="form-input"
         ></input>
       </div>
@@ -49,7 +49,7 @@ const Step1Form = ({ formData, onChange }: Props) => {
         <label htmlFor="educationLevel" className="form-label">
           What is your education level?:
         </label>
-        <select // dropdown
+        <select
           name="educationLevel"
           id="educationLevel"
           value={formData.educationLevel}
@@ -67,7 +67,7 @@ const Step1Form = ({ formData, onChange }: Props) => {
         <label htmlFor="primaryLanguage" className="form-label">
           What is your primary language?:
         </label>
-        <select // dropdown
+        <select
           name="primaryLanguage"
           id="primaryLanguage"
           value={formData.primaryLanguage}

@@ -18,7 +18,7 @@ const Step2Form = ({ formData, onChange, onCheckboxChange }: Props) => {
           name="familyHistory"
           id="familyHistory"
           value={formData.familyHistory}
-          onChange={(e) => onChange("familyHistory", e.target.value)} // can't go below 0
+          onChange={(e) => onChange("familyHistory", e.target.value)}
           className="form-input"
         >
           <option value="">Select an option</option>
@@ -86,7 +86,7 @@ const Step2Form = ({ formData, onChange, onCheckboxChange }: Props) => {
         <label htmlFor="smokingHistory" className="form-label">
           What is your smoking history?:
         </label>
-        <select // dropdown
+        <select
           name="smokingHistory"
           id="smokingHistory"
           value={formData.smokingHistory}

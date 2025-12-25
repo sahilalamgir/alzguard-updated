@@ -8,7 +8,7 @@ interface Props {
   currentStep: number;
   formData: any;
   isCurrentStepValid: () => boolean;
-  onNext: () => void;
+  onNext: (e: React.MouseEvent) => void;
   onBack: () => void;
   onChange: (field: string, value: any) => void;
   onCheckboxChange: (field: string, value: any) => void;
@@ -54,7 +54,7 @@ const MultiStepForm = ({
         {currentStep < 4 ? (
           <button
             type="button"
-            onClick={onNext}
+            onClick={(e) => onNext(e)}
             disabled={!isCurrentStepValid()}
             className="btn-primary disabled:bg-slate-300 disabled:text-slate-600 disabled:cursor-not-allowed disabled:opacity-60"
           >

@@ -1,3 +1,5 @@
+import { capitalizeFirstLetter } from "../../utils/string";
+
 interface Props {
   formData: any;
 }
@@ -12,38 +14,57 @@ const Step4Form = ({ formData }: Props) => {
         <h2 className="text-xl text-text-primary font-semibold mb-3">
           About You
         </h2>
-        <p className="form-label">Age: {formData.age}</p>
-        <p className="form-label">Sex: {formData.sex}</p>
-        <p className="form-label">Education level: {formData.educationLevel}</p>
+        <p className="form-label">Age: {capitalizeFirstLetter(formData.age)}</p>
+        <p className="form-label">Sex: {capitalizeFirstLetter(formData.sex)}</p>
         <p className="form-label">
-          Primary language: {formData.primaryLanguage}
+          Education level: {capitalizeFirstLetter(formData.educationLevel)}
+        </p>
+        <p className="form-label">
+          Primary language: {capitalizeFirstLetter(formData.primaryLanguage)}
         </p>
       </div>
       <div>
         <h2 className="text-xl text-text-primary font-semibold mb-3">
           Health Background
         </h2>
-        <p className="form-label">Family history: {formData.familyHistory}</p>
         <p className="form-label">
-          Disease history:{" "}
-          {formData.diseaseHistory.length === 0
-            ? "None"
-            : formData.diseaseHistory.map((disease: string) => (
-                <li key={disease}>{disease}</li>
-              ))}
+          Family history: {capitalizeFirstLetter(formData.familyHistory)}
         </p>
-        <p className="form-label">Smoking history: {formData.smokingHistory}</p>
+        <div className="form-label flex space-x-1">
+          <span>Disease history: </span>
+          {formData.diseaseHistory.length === 0 ? (
+            "None"
+          ) : (
+            <ul className="flex space-x-1 list-none p-0">
+              {formData.diseaseHistory.map((disease: string) => (
+                <li
+                  key={disease}
+                  className="after:content-[','] last:after:content-['']"
+                >
+                  {capitalizeFirstLetter(disease)}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        <p className="form-label">
+          Smoking history: {capitalizeFirstLetter(formData.smokingHistory)}
+        </p>
       </div>
       <div>
         <h2 className="text-xl text-text-primary font-semibold mb-3">
           Cognitive Experience
         </h2>
-        <p className="form-label">Memory issues: {formData.memoryIssues}</p>
         <p className="form-label">
-          Conversational issues: {formData.conversationalIssues}
+          Memory issues: {capitalizeFirstLetter(formData.memoryIssues)}
         </p>
         <p className="form-label">
-          Misplacement issues: {formData.misplacementIssues}
+          Conversational issues:{" "}
+          {capitalizeFirstLetter(formData.conversationalIssues)}
+        </p>
+        <p className="form-label">
+          Misplacement issues:{" "}
+          {capitalizeFirstLetter(formData.misplacementIssues)}
         </p>
       </div>
     </div>

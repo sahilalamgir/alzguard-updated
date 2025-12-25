@@ -13,7 +13,7 @@ const Step3Form = ({ formData, onChange }: Props) => {
         <label htmlFor="memoryIssues" className="form-label">
           Have you noticed increased memory lapses in the past 12 months?:
         </label>
-        <select // dropdown
+        <select
           name="memoryIssues"
           id="memoryIssues"
           value={formData.memoryIssues}
@@ -32,7 +32,7 @@ const Step3Form = ({ formData, onChange }: Props) => {
         <label htmlFor="conversationalIssues" className="form-label">
           Do you find it harder to follow conversations than before?:
         </label>
-        <select // dropdown
+        <select
           name="conversationalIssues"
           id="conversationalIssues"
           value={formData.conversationalIssues}
@@ -51,7 +51,7 @@ const Step3Form = ({ formData, onChange }: Props) => {
         <label htmlFor="misplacementIssues" className="form-label">
           Do you misplace items more frequently?:
         </label>
-        <select // dropdown
+        <select
           name="misplacementIssues"
           id="misplacementIssues"
           value={formData.misplacementIssues}
