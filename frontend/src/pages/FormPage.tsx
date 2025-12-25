@@ -1,40 +1,59 @@
 import React, { useState } from "react";
+import MultiStepForm from "../components/MultiStepForm";
 
 const FormPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState({
+    // Step 1: About You
+    age: "",
+    sex: "",
+    educationLevel: "",
+    primaryLanguage: "",
+    // Step 2: Health Background
+    familyHistory: "",
+    medicalHistory: [],
+    smokingHistory: "",
+    // Step 3: Cognitive Experience
+    memoryIssues: "",
+    conversationalIssues: "",
+    misplacementIssues: "",
+  });
+
+  const handleNext = () => setCurrentStep((prev) => prev + 1);
+  const handleBack = () => setCurrentStep((prev) => prev - 1);
+  const handleChange = (field: string, value: any) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+  const handleCheckboxChange = (field: string, value: any) => {
+    setFormData((prev) => ({ ...prev, [field]: [...formData[field], value] }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(email, password);
+    console.log(currentStep, formData);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label className="" htmlFor="email">
-          Email:
-        </label>
-        <input
-          type="text"
-          id="email"
-          name="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+    <div className="max-w-3xl mx-auto py-12 px-6">
+      <div className="text-center mb-10">
+        <h1 className="text-text-primary text-3xl font-semibold mb-3">
+          Alzheimer's Risk Assessment
+        </h1>
+        <p className="text-text-secondary text-base leading-relaxed">
+          Help us understand your cognitive health. This screening is private
+          and takes about 5 minutes.
+        </p>
       </div>
-      <div>
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </div>
-      <button type="submit">Submit</button>
-    </form>
+      <MultiStepForm
+        currentStep={currentStep}
+        formData={formData}
+        onNext={handleNext}
+        onBack={handleBack}
+        onChange={handleChange}
+        onCheckboxChange={handleCheckboxChange}
+        onSubmit={handleSubmit}
+      />
+    </div>
   );
 };
 
