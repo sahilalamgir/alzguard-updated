@@ -41,7 +41,7 @@ const Step1Form = ({ formData, onChange }: Props) => {
           <option value="">Select an option</option>
           <option value="male">Male</option>
           <option value="female">Female</option>
-          <option value="unknown">Prefer not to say</option>
+          <option value="unspecified">Prefer not to say</option>
         </select>
       </div>
 
@@ -57,9 +57,10 @@ const Step1Form = ({ formData, onChange }: Props) => {
           className="form-input"
         >
           <option value="">Select an option</option>
-          <option value="none">None</option>
-          <option value="highschool">Highschool</option>
-          <option value="university">University</option>
+          <option value="low">Less than high school</option>
+          <option value="medium">High school</option>
+          <option value="high">Undergraduate</option>
+          <option value="high">Graduate or higher</option>
         </select>
       </div>
 

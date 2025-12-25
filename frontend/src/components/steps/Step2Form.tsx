@@ -12,7 +12,7 @@ const Step2Form = ({ formData, onChange, onCheckboxChange }: Props) => {
       </h2>
       <div>
         <label htmlFor="familyHistory" className="form-label">
-          Does your family have history of Alzheimer's or dementia?:
+          Does your family have a history of Alzheimer's or dementia?:
         </label>
         <select
           name="familyHistory"
@@ -22,27 +22,28 @@ const Step2Form = ({ formData, onChange, onCheckboxChange }: Props) => {
           className="form-input"
         >
           <option value="">Select an option</option>
-          <option value="yes">Yes</option>
-          <option value="no">No</option>
-          <option value="unsure">Unsure</option>
+          <option value="immediate">Yes (parent/sibling)</option>
+          <option value="extended">Yes (extended family)</option>
+          <option value="none">No</option>
+          <option value="unknown">Unsure</option>
         </select>
       </div>
 
       <fieldset>
-        <legend>What is your medical history?:</legend>
+        <legend>Do you have any cardiovascular conditions?:</legend>
         <div>
           <input
             type="checkbox"
-            id="cardiovascular"
-            name="cardiovascular"
-            value="cardiovascular"
+            id="hypertension"
+            name="hypertension"
+            value="hypertension"
             onChange={() =>
-              onCheckboxChange("diseaseHistory", "cardiovascular")
+              onCheckboxChange("conditionHistory", "hypertension")
             }
-            checked={formData.diseaseHistory.includes("cardiovascular")}
+            checked={formData.conditionHistory.includes("hypertension")}
             className="form-checkbox"
           ></input>
-          <label htmlFor="cardiovascular">Cardiovascular disease</label>
+          <label htmlFor="hypertension">Hypertension</label>
         </div>
         <div>
           <input
@@ -50,8 +51,8 @@ const Step2Form = ({ formData, onChange, onCheckboxChange }: Props) => {
             id="diabetes"
             name="diabetes"
             value="diabetes"
-            onChange={() => onCheckboxChange("diseaseHistory", "diabetes")}
-            checked={formData.diseaseHistory.includes("diabetes")}
+            onChange={() => onCheckboxChange("conditionHistory", "diabetes")}
+            checked={formData.conditionHistory.includes("diabetes")}
             className="form-checkbox"
           ></input>
           <label htmlFor="diabetes">Diabetes</label>
@@ -62,8 +63,8 @@ const Step2Form = ({ formData, onChange, onCheckboxChange }: Props) => {
             id="stroke"
             name="stroke"
             value="stroke"
-            onChange={() => onCheckboxChange("diseaseHistory", "stroke")}
-            checked={formData.diseaseHistory.includes("stroke")}
+            onChange={() => onCheckboxChange("conditionHistory", "stroke")}
+            checked={formData.conditionHistory.includes("stroke")}
             className="form-checkbox"
           ></input>
           <label htmlFor="stroke">Stroke</label>
@@ -71,14 +72,16 @@ const Step2Form = ({ formData, onChange, onCheckboxChange }: Props) => {
         <div>
           <input
             type="checkbox"
-            id="depression"
-            name="depression"
-            value="depression"
-            onChange={() => onCheckboxChange("diseaseHistory", "depression")}
-            checked={formData.diseaseHistory.includes("depression")}
+            id="high cholesterol"
+            name="high cholesterol"
+            value="high cholesterol"
+            onChange={() =>
+              onCheckboxChange("conditionHistory", "high cholesterol")
+            }
+            checked={formData.conditionHistory.includes("high cholesterol")}
             className="form-checkbox"
           ></input>
-          <label htmlFor="depression">Depression</label>
+          <label htmlFor="high cholesterol">High cholesterol</label>
         </div>
       </fieldset>
 

@@ -11,7 +11,7 @@ const FormPage = () => {
     primaryLanguage: "",
     // Step 2: Health Background
     familyHistory: "",
-    diseaseHistory: [],
+    conditionHistory: [],
     smokingHistory: "",
     // Step 3: Cognitive Experience
     memoryIssues: "",

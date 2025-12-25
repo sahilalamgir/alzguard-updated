@@ -24,7 +24,7 @@ const Step3Form = ({ formData, onChange }: Props) => {
           <option value="never">Never</option>
           <option value="sometimes">Sometimes</option>
           <option value="often">Often</option>
-          <option value="very">Very often</option>
+          <option value="very often">Very often</option>
         </select>
       </div>
 
@@ -43,7 +43,7 @@ const Step3Form = ({ formData, onChange }: Props) => {
           <option value="never">Never</option>
           <option value="sometimes">Sometimes</option>
           <option value="often">Often</option>
-          <option value="very">Very often</option>
+          <option value="very often">Very often</option>
         </select>
       </div>
 
@@ -62,7 +62,7 @@ const Step3Form = ({ formData, onChange }: Props) => {
           <option value="never">Never</option>
           <option value="sometimes">Sometimes</option>
           <option value="often">Often</option>
-          <option value="very">Very often</option>
+          <option value="very often">Very often</option>
         </select>
       </div>
     </div>

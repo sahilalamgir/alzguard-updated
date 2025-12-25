@@ -31,17 +31,17 @@ const Step4Form = ({ formData }: Props) => {
           Family history: {capitalizeFirstLetter(formData.familyHistory)}
         </p>
         <div className="form-label flex space-x-1">
-          <span>Disease history: </span>
-          {formData.diseaseHistory.length === 0 ? (
+          <span>Cardiovascular condition history: </span>
+          {formData.conditionHistory.length === 0 ? (
             "None"
           ) : (
             <ul className="flex space-x-1 list-none p-0">
-              {formData.diseaseHistory.map((disease: string) => (
+              {formData.conditionHistory.map((condition: string) => (
                 <li
-                  key={disease}
+                  key={condition}
                   className="after:content-[','] last:after:content-['']"
                 >
-                  {capitalizeFirstLetter(disease)}
+                  {capitalizeFirstLetter(condition)}
                 </li>
               ))}
             </ul>
