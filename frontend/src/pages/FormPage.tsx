@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import MultiStepForm from "../components/MultiStepForm";
 
 const FormPage = () => {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     // Step 1: About You
@@ -83,6 +85,10 @@ const FormPage = () => {
     } else {
       console.log("high");
     }
+
+    navigate("/results", {
+      state: data,
+    });
   };
 
   return (
