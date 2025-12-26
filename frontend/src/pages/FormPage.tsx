@@ -63,9 +63,26 @@ const FormPage = () => {
       formData.misplacementIssues === ""
     );
   };
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("formData:", formData);
+    const response = await fetch("http://127.0.0.1:8000/assessment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+    const data = await response.json();
+    console.log(data);
+    console.log("Scoree:", data.final_score);
+    if (data.final_score <= 3) {
+      console.log("low");
+    } else if (data.final_score <= 7) {
+      console.log("moderate");
+    } else {
+      console.log("high");
+    }
   };
 
   return (
