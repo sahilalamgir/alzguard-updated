@@ -24,7 +24,10 @@
 
 # backend
 /backend/.venv
+/backend/.ipynb_checkpoints
 /backend/__pycache__
 
 # ml
 /ml/data
+/ml/*.keras
+/ml/__pycache__

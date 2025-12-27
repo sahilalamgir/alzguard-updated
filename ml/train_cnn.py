@@ -11,6 +11,12 @@ normalization_layer = tf.keras.layers.Rescaling(1./255)
 train_ds = train_ds.map(lambda x, y: (normalization_layer(x), y))
 val_ds = val_ds.map(lambda x, y: (normalization_layer(x), y))
 
+early_stop = tf.keras.callbacks.EarlyStopping(
+    monitor="val_loss",
+    patience=3,
+    restore_best_weights=True
+)
+
 model = build_cnn()
 
 model.compile(
@@ -21,9 +27,14 @@ model.compile(
 
 model.summary()
 
-model.save("cnn_from_scratch.h5")
+model.save("cnn_from_scratch.keras")
 
-history = model.fit(train_ds, validation_data=val_ds, epochs=EPOCHS)
+history = model.fit(
+    train_ds,
+    validation_data=val_ds,
+    epochs=EPOCHS,
+    callbacks=[early_stop]
+)
 
 plt.plot(history.history["loss"], label="train loss")
 plt.plot(history.history["val_loss"], label="val loss")
