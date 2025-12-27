@@ -22,6 +22,9 @@
 /frontend/yarn-debug.log*
 /frontend/yarn-error.log*
 
-# virtual environment
+# backend
 /backend/.venv
 /backend/__pycache__
+
+# ml
+/ml/data
