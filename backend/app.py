@@ -14,13 +14,14 @@ app.add_middleware(
 def assess_data(form_data: dict):
     print("hello")
     print(form_data)
-    score = 0
-    if int(form_data["age"]) >= 65:
-        score += 2
-    if form_data["familyHistory"] == "immediate":
-        score += 3
-    if form_data["memoryIssues"] == "very often":
-        score += 3
-    if form_data["misplacementIssues"] == "very often":
-        score += 2
-    return {"final_score": score}
+    # score = 0
+    # if int(form_data["age"]) >= 65:
+    #     score += 2
+    # if form_data["familyHistory"] == "immediate":
+    #     score += 3
+    # if form_data["memoryIssues"] == "very often":
+    #     score += 3
+    # if form_data["misplacementIssues"] == "very often":
+    #     score += 2
+    # return {"final_score": score}
+    return [0.01, 0.22, 0.73, 0.04]

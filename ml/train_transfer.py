@@ -1,6 +1,5 @@
 import tensorflow as tf
 from dataset import load_datasets
-from model import build_cnn
 from config import EPOCHS, LEARNING_RATE
 import matplotlib.pyplot as plt
 
@@ -17,7 +16,25 @@ early_stop = tf.keras.callbacks.EarlyStopping(
     restore_best_weights=True
 )
 
-model = build_cnn()
+base_model = tf.keras.applications.EfficientNetB0(
+    include_top=False,
+    weights="imagenet",
+    input_shape=(224,224,3)
+)
+
+base_model.trainable = False
+
+x = base_model.output
+x = tf.keras.layers.GlobalAveragePooling2D()(x)
+x = tf.keras.layers.BatchNormalization()(x)
+x = tf.keras.layers.Dense(128, activation="relu")(x)
+x = tf.keras.layers.Dropout(0.5)(x)
+outputs = tf.keras.layers.Dense(4, activation="softmax")(x)
+
+model = tf.keras.Model(
+    inputs=base_model.inputs,
+    outputs=outputs
+)
 
 model.compile(
     optimizer=tf.keras.optimizers.Adam(learning_rate=LEARNING_RATE),
@@ -34,7 +51,7 @@ history = model.fit(
     callbacks=[early_stop]
 )
 
-model.save("./models/cnn_from_scratch.keras")
+model.save("./models/efficientnet_alzheimers.keras")
 
 plt.plot(history.history["loss"], label="train loss")
 plt.plot(history.history["val_loss"], label="val loss")

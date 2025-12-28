@@ -29,5 +29,5 @@
 
 # ml
 /ml/data
-/ml/*.keras
+/ml/models/*.keras
 /ml/__pycache__

@@ -77,14 +77,14 @@ const FormPage = () => {
     });
     const data = await response.json();
     console.log(data);
-    console.log("Scoree:", data.final_score);
-    if (data.final_score <= 3) {
-      console.log("low");
-    } else if (data.final_score <= 7) {
-      console.log("moderate");
-    } else {
-      console.log("high");
-    }
+    // console.log("Scoree:", data.final_score);
+    // if (data.final_score <= 3) {
+    //   console.log("low");
+    // } else if (data.final_score <= 7) {
+    //   console.log("moderate");
+    // } else {
+    //   console.log("high");
+    // }
 
     navigate("/results", {
       state: data,
