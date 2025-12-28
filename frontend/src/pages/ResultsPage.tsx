@@ -17,7 +17,7 @@ const ResultsPage = () => {
           Your Assessment Summary
         </h1>
       </div>
-      <div className="bg-white rounded-lg shadow-md p-8 space-y-8">
+      <div className="bg-white rounded-lg shadow-md p-8 space-y-6">
         <div className="space-y-4">
           <p className="text-2xl text-text-primary font-semibold">
             Most Likely Stage:{" "}

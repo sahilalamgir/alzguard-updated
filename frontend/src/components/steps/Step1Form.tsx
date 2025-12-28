@@ -57,10 +57,10 @@ const Step1Form = ({ formData, onChange }: Props) => {
           className="form-input"
         >
           <option value="">Select an option</option>
-          <option value="low">Less than high school</option>
-          <option value="medium">High school</option>
-          <option value="high">Undergraduate</option>
-          <option value="high">Graduate or higher</option>
+          <option value="lessThanHighSchool">Less than high school</option>
+          <option value="highSchool">High school</option>
+          <option value="undergraduate">Undergraduate</option>
+          <option value="graduate">Graduate or higher</option>
         </select>
       </div>
 
