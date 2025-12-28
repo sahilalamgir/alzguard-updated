@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import tensorflow as tf
+import numpy as np
+from PIL import Image
 
 app = FastAPI()
 app.add_middleware(
@@ -10,12 +13,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+model = tf.keras.models.load_model("../ml/models/cnn_from_scratch.keras")
+
 @app.post("/assess-risk")
 def assess_risk(form_data: dict):
     print("hello")
     print(form_data)
     score = calculate_score(form_data)
     return [0.01, 0.22, 0.73, 0.04]
+
+def preprocess_image(file):
+    img = Image.open(file).convert("RGB")
+    img = img.resize((224, 224))
+    img = np.array(img) / 255.0
+    img = np.expand_dims(img, axis=-1)
+    img = np.expand_dims(img, axis=0)
+    return img
 
 def calculate_score(form_data: dict) -> float:
     # Demographic score
