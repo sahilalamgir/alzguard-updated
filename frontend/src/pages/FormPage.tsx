@@ -168,6 +168,7 @@ const FormPage = () => {
         onChange={handleChange}
         onCheckboxChange={handleCheckboxChange}
         onSubmit={handleSubmit}
+        isSubmitting={isSubmitting}
       />
     </div>
   );

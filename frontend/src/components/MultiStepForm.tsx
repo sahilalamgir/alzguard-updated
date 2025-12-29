@@ -13,8 +13,12 @@ interface Props {
   onNext: (e: React.MouseEvent) => void;
   onBack: () => void;
   onChange: <K extends keyof FormData>(field: K, value: FormData[K]) => void;
-  onCheckboxChange: (field: "conditionHistory", value: FormData["conditionHistory"][number]) => void;
+  onCheckboxChange: (
+    field: "conditionHistory",
+    value: FormData["conditionHistory"][number]
+  ) => void;
   onSubmit: (e: React.FormEvent) => void;
+  isSubmitting: boolean;
 }
 
 const MultiStepForm = ({
@@ -26,6 +30,7 @@ const MultiStepForm = ({
   onChange,
   onCheckboxChange,
   onSubmit,
+  isSubmitting,
 }: Props) => {
   return (
     <form onSubmit={onSubmit} className="bg-white rounded-lg shadow-md p-8">
@@ -66,8 +71,12 @@ const MultiStepForm = ({
             Next
           </button>
         ) : (
-          <button type="submit" className="btn-primary font-semibold">
-            Submit
+          <button
+            type="submit"
+            className="btn-primary font-semibold disabled:bg-slate-300 disabled:text-slate-600 disabled:cursor-not-allowed disabled:opacity-60"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Submitting..." : "Submit"}
           </button>
         )}
       </div>
