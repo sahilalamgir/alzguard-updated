@@ -1,8 +1,11 @@
-import { FormData } from "../../types/form";
+import { AssessmentFormData } from "../../types/form";
 
 interface Props {
-  formData: FormData;
-  onChange: <K extends keyof FormData>(field: K, value: FormData[K]) => void;
+  formData: AssessmentFormData;
+  onChange: <K extends keyof AssessmentFormData>(
+    field: K,
+    value: AssessmentFormData[K]
+  ) => void;
 }
 
 const Step3Form = ({ formData, onChange }: Props) => {
@@ -19,7 +22,12 @@ const Step3Form = ({ formData, onChange }: Props) => {
           name="memoryIssues"
           id="memoryIssues"
           value={formData.memoryIssues}
-          onChange={(e) => onChange("memoryIssues", e.target.value)}
+          onChange={(e) =>
+            onChange(
+              "memoryIssues",
+              e.target.value as AssessmentFormData["memoryIssues"]
+            )
+          }
           className="form-input"
         >
           <option value="">Select an option</option>
@@ -38,7 +46,12 @@ const Step3Form = ({ formData, onChange }: Props) => {
           name="conversationalIssues"
           id="conversationalIssues"
           value={formData.conversationalIssues}
-          onChange={(e) => onChange("conversationalIssues", e.target.value)}
+          onChange={(e) =>
+            onChange(
+              "conversationalIssues",
+              e.target.value as AssessmentFormData["conversationalIssues"]
+            )
+          }
           className="form-input"
         >
           <option value="">Select an option</option>
@@ -57,7 +70,12 @@ const Step3Form = ({ formData, onChange }: Props) => {
           name="misplacementIssues"
           id="misplacementIssues"
           value={formData.misplacementIssues}
-          onChange={(e) => onChange("misplacementIssues", e.target.value)}
+          onChange={(e) =>
+            onChange(
+              "misplacementIssues",
+              e.target.value as AssessmentFormData["misplacementIssues"]
+            )
+          }
           className="form-input"
         >
           <option value="">Select an option</option>

@@ -1,8 +1,8 @@
 import { capitalizeFirstLetter } from "../../utils/string";
-import { FormData } from "../../types/form";
+import { AssessmentFormData } from "../../types/form";
 
 interface Props {
-  formData: FormData;
+  formData: AssessmentFormData;
 }
 
 const Step5Form = ({ formData }: Props) => {
@@ -15,7 +15,7 @@ const Step5Form = ({ formData }: Props) => {
         <h2 className="text-xl text-text-primary font-semibold mb-3">
           About You
         </h2>
-        <p className="form-label">Age: {capitalizeFirstLetter(formData.age)}</p>
+        <p className="form-label">Age: {formData.age}</p>
         <p className="form-label">Sex: {capitalizeFirstLetter(formData.sex)}</p>
         <p className="form-label">
           Education level: {capitalizeFirstLetter(formData.educationLevel)}

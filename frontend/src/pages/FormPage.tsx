@@ -1,22 +1,22 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MultiStepForm from "../components/MultiStepForm";
-import { FormData as FormType, AssessmentResult } from "../types/form";
+import { AssessmentFormData, AssessmentResult } from "../types/form";
 
 const FormPage = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<AssessmentFormData>({
     // Step 1: About You
-    age: "",
+    age: null,  // ← null when empty, not ""
     sex: "",
     educationLevel: "",
     primaryLanguage: "",
     // Step 2: Health Background
     familyHistory: "",
-    conditionHistory: [] as string[],
+    conditionHistory: [],  // ← Don't need "as string[]" anymore, type is inferred!
     smokingHistory: "",
     // Step 3: Cognitive Experience
     memoryIssues: "",
@@ -31,15 +31,26 @@ const FormPage = () => {
     e.stopPropagation();
     setCurrentStep((prev) => prev + 1);
   };
+
   const handleBack = () => setCurrentStep((prev) => prev - 1);
-  const handleChange = (field: string, value: any) => {
+
+  // Type-safe change handler - no more 'any'!
+  const handleChange = <K extends keyof AssessmentFormData>(
+    field: K,
+    value: AssessmentFormData[K]
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
-  const handleCheckboxChange = (field: string, value: any) => {
-    if ((formData[field] as string[]).includes(value)) {
+
+  // Type-safe checkbox handler - only works with conditionHistory
+  const handleCheckboxChange = (
+    field: "conditionHistory",
+    value: AssessmentFormData["conditionHistory"][number]
+  ) => {
+    if (formData[field].includes(value)) {
       setFormData((prev) => ({
         ...prev,
-        [field]: prev[field].filter((item: string) => item !== value),
+        [field]: prev[field].filter((item) => item !== value),
       }));
     } else {
       setFormData((prev) => ({ ...prev, [field]: [...prev[field], value] }));
@@ -81,10 +92,19 @@ const FormPage = () => {
     }
     setIsSubmitting(true);
     setError(null);
-    console.log("formData:", formData);
+
     try {
+      // Validate required fields before sending (belt and suspenders)
+      if (formData.age === null) {
+        throw new Error("Age is required");
+      }
+      if (formData.mriScan === null) {
+        throw new Error("MRI scan is required");
+      }
+
       const finalFormData = new FormData();
-      finalFormData.append("age", formData.age);
+      // Convert age to string explicitly - FormData.append only takes string | Blob
+      finalFormData.append("age", formData.age.toString());
       finalFormData.append("sex", formData.sex);
       finalFormData.append("educationLevel", formData.educationLevel);
       finalFormData.append("primaryLanguage", formData.primaryLanguage);

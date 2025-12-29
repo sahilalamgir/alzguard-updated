@@ -1,8 +1,11 @@
-import { FormData } from "../../types/form";
+import { AssessmentFormData } from "../../types/form";
 
 interface Props {
-  formData: FormData;
-  onChange: <K extends keyof FormData>(field: K, value: FormData[K]) => void;
+  formData: AssessmentFormData;
+  onChange: <K extends keyof AssessmentFormData>(
+    field: K,
+    value: AssessmentFormData[K]
+  ) => void;
 }
 
 const Step1Form = ({ formData, onChange }: Props) => {
@@ -21,15 +24,20 @@ const Step1Form = ({ formData, onChange }: Props) => {
           id="age"
           autoComplete="off"
           placeholder="Enter your age..."
-          value={formData.age}
-          onChange={(e) =>
-            onChange(
-              "age",
-              Number(e.target.value) < 0 ? 0 : Number(e.target.value)
-            )
-          }
+          value={formData.age ?? ""}
+          onChange={(e) => {
+            const value = e.target.value;
+            if (value === "") {
+              onChange("age", null);
+            } else {
+              const numValue = parseInt(value, 10);
+              if (!isNaN(numValue) && numValue >= 0 && numValue <= 120) {
+                onChange("age", numValue);
+              }
+            }
+          }}
           className="form-input"
-        ></input>
+        />
       </div>
 
       <div>
@@ -40,7 +48,12 @@ const Step1Form = ({ formData, onChange }: Props) => {
           name="sex"
           id="sex"
           value={formData.sex}
-          onChange={(e) => onChange("sex", e.target.value)}
+          onChange={(e) =>
+            onChange(
+              "sex",
+              e.target.value as AssessmentFormData["sex"]
+            )
+          }
           className="form-input"
         >
           <option value="">Select an option</option>
@@ -58,7 +71,12 @@ const Step1Form = ({ formData, onChange }: Props) => {
           name="educationLevel"
           id="educationLevel"
           value={formData.educationLevel}
-          onChange={(e) => onChange("educationLevel", e.target.value)}
+          onChange={(e) =>
+            onChange(
+              "educationLevel",
+              e.target.value as AssessmentFormData["educationLevel"]
+            )
+          }
           className="form-input"
         >
           <option value="">Select an option</option>
@@ -77,7 +95,12 @@ const Step1Form = ({ formData, onChange }: Props) => {
           name="primaryLanguage"
           id="primaryLanguage"
           value={formData.primaryLanguage}
-          onChange={(e) => onChange("primaryLanguage", e.target.value)}
+          onChange={(e) =>
+            onChange(
+              "primaryLanguage",
+              e.target.value as AssessmentFormData["primaryLanguage"]
+            )
+          }
           className="form-input"
         >
           <option value="">Select an option</option>

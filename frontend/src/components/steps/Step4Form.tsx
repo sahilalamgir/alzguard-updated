@@ -1,8 +1,11 @@
-import { FormData } from "../../types/form";
+import { AssessmentFormData } from "../../types/form";
 
 interface Props {
-  formData: FormData;
-  onChange: <K extends keyof FormData>(field: K, value: FormData[K]) => void;
+  formData: AssessmentFormData;
+  onChange: <K extends keyof AssessmentFormData>(
+    field: K,
+    value: AssessmentFormData[K]
+  ) => void;
 }
 
 const Step4Form = ({ formData, onChange }: Props) => {
@@ -29,8 +32,12 @@ const Step4Form = ({ formData, onChange }: Props) => {
       <input
         type="file"
         name="myImage"
+        accept="image/*"
         onChange={(e) => {
-          onChange("mriScan", e.target.files[0]);
+          const file = e.target.files?.[0];
+          if (file) {
+            onChange("mriScan", file);
+          }
         }}
       />
     </div>

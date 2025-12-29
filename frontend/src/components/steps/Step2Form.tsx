@@ -1,9 +1,15 @@
-import { FormData } from "../../types/form";
+import { AssessmentFormData } from "../../types/form";
 
 interface Props {
-  formData: FormData;
-  onChange: <K extends keyof FormData>(field: K, value: FormData[K]) => void;
-  onCheckboxChange: (field: "conditionHistory", value: FormData["conditionHistory"][number]) => void;
+  formData: AssessmentFormData;
+  onChange: <K extends keyof AssessmentFormData>(
+    field: K,
+    value: AssessmentFormData[K]
+  ) => void;
+  onCheckboxChange: (
+    field: "conditionHistory",
+    value: AssessmentFormData["conditionHistory"][number]
+  ) => void;
 }
 
 const Step2Form = ({ formData, onChange, onCheckboxChange }: Props) => {
@@ -20,7 +26,12 @@ const Step2Form = ({ formData, onChange, onCheckboxChange }: Props) => {
           name="familyHistory"
           id="familyHistory"
           value={formData.familyHistory}
-          onChange={(e) => onChange("familyHistory", e.target.value)}
+          onChange={(e) =>
+            onChange(
+              "familyHistory",
+              e.target.value as AssessmentFormData["familyHistory"]
+            )
+          }
           className="form-input"
         >
           <option value="">Select an option</option>
@@ -95,7 +106,12 @@ const Step2Form = ({ formData, onChange, onCheckboxChange }: Props) => {
           name="smokingHistory"
           id="smokingHistory"
           value={formData.smokingHistory}
-          onChange={(e) => onChange("smokingHistory", e.target.value)}
+          onChange={(e) =>
+            onChange(
+              "smokingHistory",
+              e.target.value as AssessmentFormData["smokingHistory"]
+            )
+          }
           className="form-input"
         >
           <option value="">Select an option</option>

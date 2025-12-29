@@ -1,7 +1,8 @@
-export interface FormData {
+// Better naming: avoid conflict with built-in FormData by being more specific
+export interface AssessmentFormData {
   // Step 1 - Demographics
-  age: string;
-  sex: "male" | "female" | "unspecified" | ""; // ← Literal types!
+  age: number | null;  // ← number, not string! null when empty
+  sex: "male" | "female" | "unspecified" | "";
   educationLevel:
     | "lessThanHighSchool"
     | "highSchool"

@@ -4,18 +4,21 @@ import Step2Form from "./steps/Step2Form";
 import Step3Form from "./steps/Step3Form";
 import Step4Form from "./steps/Step4Form";
 import Step5Form from "./steps/Step5Form";
-import { FormData } from "../types/form";
+import { AssessmentFormData } from "../types/form";
 
 interface Props {
   currentStep: number;
-  formData: FormData;
+  formData: AssessmentFormData;
   isCurrentStepValid: () => boolean;
   onNext: (e: React.MouseEvent) => void;
   onBack: () => void;
-  onChange: <K extends keyof FormData>(field: K, value: FormData[K]) => void;
+  onChange: <K extends keyof AssessmentFormData>(
+    field: K,
+    value: AssessmentFormData[K]
+  ) => void;
   onCheckboxChange: (
     field: "conditionHistory",
-    value: FormData["conditionHistory"][number]
+    value: AssessmentFormData["conditionHistory"][number]
   ) => void;
   onSubmit: (e: React.FormEvent) => void;
   isSubmitting: boolean;
