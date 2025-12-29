@@ -18,6 +18,12 @@ app.add_middleware(
 model = tf.keras.models.load_model("../ml/models/cnn_from_scratch.keras")
 
 LABELS = ["Mild", "Moderate", "None", "Very Mild"]
+RISK_WEIGHTS = {
+    "NonDemented": 0.0,
+    "VeryMildDemented": 0.33,
+    "MildDemented": 0.66,
+    "ModerateDemented": 1.0
+}
 
 @app.post("/assess-risk")
 def assess_risk(
@@ -52,15 +58,29 @@ def assess_risk(
     print(f"Clinical score: {clinical_score}")
     print(f"MRI prediction: {mri_prediction}")
     cnn_confidence = max(mri_prediction)
-    final_score = 0.7 * cnn_confidence + 0.3 * clinical_score
+    cnn_score = (
+        mri_prediction[0] * RISK_WEIGHTS["MildDemented"] +
+        mri_prediction[1] * RISK_WEIGHTS["ModerateDemented"] +
+        mri_prediction[2] * RISK_WEIGHTS["NonDemented"] +
+        mri_prediction[3] * RISK_WEIGHTS["VeryMildDemented"] 
+    )
+    final_score = 0.7 * cnn_score + 0.3 * clinical_score
     risk = risk_bucket(final_score)
-
-    return {
+    print({
         "labels": LABELS,
         "probabilities": mri_prediction,
         "predicted_label": LABELS[np.argmax(mri_prediction)],
         "confidence": cnn_confidence,
         "final_score": final_score,
+        "risk": risk
+    })
+
+    return {
+        "labels": LABELS,
+        "probabilities": mri_prediction.tolist(),
+        "predicted_label": LABELS[np.argmax(mri_prediction)],
+        "confidence": float(cnn_confidence),
+        "final_score": float(final_score),
         "risk": risk
     }
 
@@ -194,4 +214,4 @@ def risk_bucket(p: float):
 # predict("../ml/data/MildDemented/0a0a0acd-8bd8-4b79-b724-cc5711e83bc7.jpg")
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8000)
