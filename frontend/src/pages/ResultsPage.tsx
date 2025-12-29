@@ -48,10 +48,28 @@ const ResultsPage = () => {
               {capitalizeFirstLetter(result.risk)}
             </span>
           </p>
-          <p className="text-text-secondary text-base leading-relaxed">
-            MRI patterns were consistent with early structural changes. Reported
-            memory symptoms and age range increase estimated cognitive risk.
-          </p>
+          {result.risk === "low" && (
+            <p className="text-text-secondary text-base leading-relaxed">
+              MRI patterns did not show structural changes commonly associated
+              with cognitive decline. Clinical factors such as age and reported
+              symptoms suggest a low estimated risk at this time.
+            </p>
+          )}
+          {result.risk === "moderate" && (
+            <p className="text-text-secondary text-base leading-relaxed">
+              MRI patterns were consistent with early structural changes.
+              Reported memory symptoms and age range increase estimated
+              cognitive risk.
+            </p>
+          )}
+          {result.risk === "high" && (
+            <p className="text-text-secondary text-base leading-relaxed">
+              MRI patterns showed structural changes commonly associated with
+              cognitive impairment. Combined with reported memory symptoms and
+              age-related risk factors, the estimated cognitive risk is
+              elevated. Clinical follow-up is strongly recommended.
+            </p>
+          )}
         </div>
         <div className="space-y-4 border-t py-4">
           <p className="text-text-secondary text-base leading-relaxed">
