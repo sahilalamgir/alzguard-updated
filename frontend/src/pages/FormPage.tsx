@@ -32,7 +32,7 @@ const FormPage = () => {
   const handleChange = (field: string, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
-  const handleCheckboxChange = (field: string, value: string) => {
+  const handleCheckboxChange = (field: string, value: any) => {
     if (formData[field].includes(value)) {
       setFormData((prev) => ({
         ...prev,
@@ -46,7 +46,8 @@ const FormPage = () => {
     return (
       (currentStep === 1 && isStep1Valid()) ||
       (currentStep === 2 && isStep2Valid()) ||
-      (currentStep === 3 && isStep3Valid())
+      (currentStep === 3 && isStep3Valid()) ||
+      (currentStep === 4 && isStep4Valid())
     );
   };
   const isStep1Valid = () => {
@@ -66,6 +67,9 @@ const FormPage = () => {
       formData.conversationalIssues === "" ||
       formData.misplacementIssues === ""
     );
+  };
+  const isStep4Valid = () => {
+    return !(formData.mriScan === null);
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
