@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MultiStepForm from "../components/MultiStepForm";
+import { FormData as FormType, AssessmentResult } from "../types/form";
 
 const FormPage = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     // Step 1: About You
-    age: null,
+    age: "",
     sex: "",
     educationLevel: "",
     primaryLanguage: "",
@@ -73,33 +76,65 @@ const FormPage = () => {
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("formData:", formData);
-    const finalFormData = new FormData();
-    finalFormData.append("age", formData.age);
-    finalFormData.append("sex", formData.sex);
-    finalFormData.append("educationLevel", formData.educationLevel);
-    finalFormData.append("primaryLanguage", formData.primaryLanguage);
-    finalFormData.append("familyHistory", formData.familyHistory);
-    for (const condition of formData.conditionHistory) {
-      finalFormData.append("conditionHistory", condition);
+    if (isSubmitting) {
+      return;
     }
-    finalFormData.append("smokingHistory", formData.smokingHistory);
-    finalFormData.append("memoryIssues", formData.memoryIssues);
-    finalFormData.append("conversationalIssues", formData.conversationalIssues);
-    finalFormData.append("misplacementIssues", formData.misplacementIssues);
-    finalFormData.append("mriScan", formData.mriScan);
-    const response = await fetch("http://127.0.0.1:8000/assess-risk", {
-      method: "POST",
-      // headers: {
-      //   "Content-Type": "multipart/form-data",
-      // },
-      body: finalFormData,
-    });
-    const data = await response.json();
-    console.log(data);
-    navigate("/results", {
-      state: data,
-    });
+    setIsSubmitting(true);
+    setError(null);
+    console.log("formData:", formData);
+    try {
+      const finalFormData = new FormData();
+      finalFormData.append("age", formData.age);
+      finalFormData.append("sex", formData.sex);
+      finalFormData.append("educationLevel", formData.educationLevel);
+      finalFormData.append("primaryLanguage", formData.primaryLanguage);
+      finalFormData.append("familyHistory", formData.familyHistory);
+      for (const condition of formData.conditionHistory) {
+        finalFormData.append("conditionHistory", condition);
+      }
+      finalFormData.append("smokingHistory", formData.smokingHistory);
+      finalFormData.append("memoryIssues", formData.memoryIssues);
+      finalFormData.append(
+        "conversationalIssues",
+        formData.conversationalIssues
+      );
+      finalFormData.append("misplacementIssues", formData.misplacementIssues);
+      finalFormData.append("mriScan", formData.mriScan);
+      const response = await fetch("http://127.0.0.1:8000/assess-risk", {
+        method: "POST",
+        body: finalFormData,
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server error (${response.status}): ${errorText}`);
+      }
+
+      let data: AssessmentResult;
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        throw new Error("Invalid response from server");
+      }
+
+      console.log(data);
+
+      navigate("/results", {
+        state: data,
+      });
+    } catch (err) {
+      if (err instanceof TypeError && err.message == "Failed to fetch") {
+        setError(
+          "Unable to connect to server. Please check your connection and try again."
+        );
+      } else if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unexpected error occurred. Please try again.");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -113,6 +148,17 @@ const FormPage = () => {
           and takes about 5 minutes.
         </p>
       </div>
+
+      {error && (
+        <div
+          className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4"
+          role="alert"
+        >
+          <strong className="font-bold">Error: </strong>
+          <span>{error}</span>
+        </div>
+      )}
+
       <MultiStepForm
         currentStep={currentStep}
         formData={formData}

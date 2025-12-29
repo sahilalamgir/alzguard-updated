@@ -1,7 +1,9 @@
+import { FormData } from "../../types/form";
+
 interface Props {
-  formData: any;
-  onChange: (field: string, value: any) => void;
-  onCheckboxChange: (field: string, value: any) => void;
+  formData: FormData;
+  onChange: <K extends keyof FormData>(field: K, value: FormData[K]) => void;
+  onCheckboxChange: (field: "conditionHistory", value: FormData["conditionHistory"][number]) => void;
 }
 
 const Step2Form = ({ formData, onChange, onCheckboxChange }: Props) => {

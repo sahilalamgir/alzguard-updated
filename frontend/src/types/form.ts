@@ -1,6 +1,6 @@
 export interface FormData {
   // Step 1 - Demographics
-  age: number | null;
+  age: string;
   sex: "male" | "female" | "unspecified" | ""; // ← Literal types!
   educationLevel:
     | "lessThanHighSchool"
@@ -24,4 +24,18 @@ export interface FormData {
 
   // Step 4 - MRI
   mriScan: File | null;
+}
+
+export interface AssessmentResult {
+  labels: string[];
+  probabilities: number[];
+  predicted_label: string;
+  confidence: number;
+  final_score: number;
+  risk: "low" | "moderate" | "high";
+}
+
+export interface ChartDataPoint {
+  label: string;
+  probability: number;
 }

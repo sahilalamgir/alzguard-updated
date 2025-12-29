@@ -1,6 +1,8 @@
+import { FormData } from "../../types/form";
+
 interface Props {
-  formData: any;
-  onChange: (field: string, value: any) => void;
+  formData: FormData;
+  onChange: <K extends keyof FormData>(field: K, value: FormData[K]) => void;
 }
 
 const Step1Form = ({ formData, onChange }: Props) => {
@@ -21,7 +23,10 @@ const Step1Form = ({ formData, onChange }: Props) => {
           placeholder="Enter your age..."
           value={formData.age}
           onChange={(e) =>
-            onChange("age", Number(e.target.value) < 0 ? 0 : e.target.value)
+            onChange(
+              "age",
+              Number(e.target.value) < 0 ? 0 : Number(e.target.value)
+            )
           }
           className="form-input"
         ></input>

@@ -1,7 +1,8 @@
 import { capitalizeFirstLetter } from "../../utils/string";
+import { FormData } from "../../types/form";
 
 interface Props {
-  formData: any;
+  formData: FormData;
 }
 
 const Step5Form = ({ formData }: Props) => {

@@ -1,6 +1,8 @@
+import { FormData } from "../../types/form";
+
 interface Props {
-  formData: any;
-  onChange: (field: string, value: any) => void;
+  formData: FormData;
+  onChange: <K extends keyof FormData>(field: K, value: FormData[K]) => void;
 }
 
 const Step4Form = ({ formData, onChange }: Props) => {
