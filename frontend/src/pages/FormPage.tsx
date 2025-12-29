@@ -19,6 +19,8 @@ const FormPage = () => {
     memoryIssues: "",
     conversationalIssues: "",
     misplacementIssues: "",
+    // Step 4: MRI Upload
+    mriScan: null,
   });
 
   const handleNext = (e: React.MouseEvent) => {

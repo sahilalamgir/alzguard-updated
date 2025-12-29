@@ -3,6 +3,7 @@ import Step1Form from "./steps/Step1Form";
 import Step2Form from "./steps/Step2Form";
 import Step3Form from "./steps/Step3Form";
 import Step4Form from "./steps/Step4Form";
+import Step5Form from "./steps/Step5Form";
 
 interface Props {
   currentStep: number;
@@ -40,7 +41,10 @@ const MultiStepForm = ({
       {currentStep === 3 && (
         <Step3Form formData={formData} onChange={onChange} />
       )}
-      {currentStep === 4 && <Step4Form formData={formData} />}
+      {currentStep === 4 && (
+        <Step4Form formData={formData} onChange={onChange} />
+      )}
+      {currentStep === 5 && <Step5Form formData={formData} />}
 
       <div className="flex justify-between mt-8">
         <button
@@ -51,7 +55,7 @@ const MultiStepForm = ({
         >
           Back
         </button>
-        {currentStep < 4 ? (
+        {currentStep < 5 ? (
           <button
             type="button"
             onClick={(e) => onNext(e)}

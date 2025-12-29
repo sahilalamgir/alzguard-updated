@@ -15,6 +15,8 @@ app.add_middleware(
 
 model = tf.keras.models.load_model("../ml/models/cnn_from_scratch.keras")
 
+
+
 @app.post("/assess-risk")
 def assess_risk(form_data: dict):
     print("hello")
@@ -136,3 +138,10 @@ def calculate_score(form_data: dict) -> float:
 
     return clinical_score
 
+def predict(path):
+    print("doing my thang")
+    img = preprocess_image(path)
+    result = model.predict(img)
+    print(result)
+
+# predict("../ml/data/MildDemented/0a0a0acd-8bd8-4b79-b724-cc5711e83bc7.jpg")
