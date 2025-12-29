@@ -33,7 +33,7 @@ const FormPage = () => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
   const handleCheckboxChange = (field: string, value: any) => {
-    if (formData[field].includes(value)) {
+    if ((formData[field] as string[]).includes(value)) {
       setFormData((prev) => ({
         ...prev,
         [field]: prev[field].filter((item: string) => item !== value),
