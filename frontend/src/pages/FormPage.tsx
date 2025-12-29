@@ -7,13 +7,13 @@ const FormPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     // Step 1: About You
-    age: "",
+    age: null,
     sex: "",
     educationLevel: "",
     primaryLanguage: "",
     // Step 2: Health Background
     familyHistory: "",
-    conditionHistory: [],
+    conditionHistory: [] as string[],
     smokingHistory: "",
     // Step 3: Cognitive Experience
     memoryIssues: "",
@@ -52,7 +52,7 @@ const FormPage = () => {
   };
   const isStep1Valid = () => {
     return !(
-      formData.age === "" ||
+      formData.age === null ||
       formData.sex === "" ||
       formData.educationLevel === "" ||
       formData.primaryLanguage === ""
@@ -74,12 +74,26 @@ const FormPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("formData:", formData);
-    const response = await fetch("http://127.0.0.1:8000/assessment", {
+    const finalFormData = new FormData();
+    finalFormData.append("age", formData.age);
+    finalFormData.append("sex", formData.sex);
+    finalFormData.append("educationLevel", formData.educationLevel);
+    finalFormData.append("primaryLanguage", formData.primaryLanguage);
+    finalFormData.append("familyHistory", formData.familyHistory);
+    for (const condition of formData.conditionHistory) {
+      finalFormData.append("conditionHistory", condition);
+    }
+    finalFormData.append("smokingHistory", formData.smokingHistory);
+    finalFormData.append("memoryIssues", formData.memoryIssues);
+    finalFormData.append("conversationalIssues", formData.conversationalIssues);
+    finalFormData.append("misplacementIssues", formData.misplacementIssues);
+    finalFormData.append("mriScan", formData.mriScan);
+    const response = await fetch("http://127.0.0.1:8000/assess-risk", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
+      // headers: {
+      //   "Content-Type": "multipart/form-data",
+      // },
+      body: finalFormData,
     });
     const data = await response.json();
     console.log(data);

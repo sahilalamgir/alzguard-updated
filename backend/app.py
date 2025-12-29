@@ -1,8 +1,10 @@
-from fastapi import FastAPI
+from typing import List, Annotated
+from fastapi import FastAPI, File, Form, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 import tensorflow as tf
 import numpy as np
 from PIL import Image
+import uvicorn
 
 app = FastAPI()
 app.add_middleware(
@@ -15,20 +17,57 @@ app.add_middleware(
 
 model = tf.keras.models.load_model("../ml/models/cnn_from_scratch.keras")
 
-
+LABELS = ["Mild", "Moderate", "None", "Very Mild"]
 
 @app.post("/assess-risk")
-def assess_risk(form_data: dict):
-    print("hello")
-    print(form_data)
-    score = calculate_score(form_data)
-    return [0.01, 0.22, 0.73, 0.04]
+def assess_risk(
+    age: int = Form(...),
+    sex: str = Form(...),
+    educationLevel: str = Form(...),
+    primaryLanguage: str = Form(...),
+    familyHistory: str = Form(...),
+    conditionHistory: Annotated[List[str], Form()] = [],
+    smokingHistory: str = Form(...),
+    memoryIssues: str = Form(...),
+    conversationalIssues: str = Form(...),
+    misplacementIssues: str = Form(...),
+    mriScan: UploadFile = File(...)
+):
+    form_data = {
+        "age": age,
+        "sex": sex,
+        "educationLevel": educationLevel,
+        "primaryLanguage": primaryLanguage,
+        "familyHistory": familyHistory,
+        "cardiovascularConditions": conditionHistory,
+        "smokingHistory": smokingHistory,
+        "memoryIssues": memoryIssues,
+        "conversationalIssues": conversationalIssues,
+        "misplacementIssues": misplacementIssues
+    }
+
+    clinical_score = calculate_score(form_data)
+    preprocessed_img = preprocess_image(mriScan.file)
+    mri_prediction = model.predict(preprocessed_img)[0]
+    print(f"Clinical score: {clinical_score}")
+    print(f"MRI prediction: {mri_prediction}")
+    cnn_confidence = max(mri_prediction)
+    final_score = 0.7 * cnn_confidence + 0.3 * clinical_score
+    risk = risk_bucket(final_score)
+
+    return {
+        "labels": LABELS,
+        "probabilities": mri_prediction,
+        "predicted_label": LABELS[np.argmax(mri_prediction)],
+        "confidence": cnn_confidence,
+        "final_score": final_score,
+        "risk": risk
+    }
 
 def preprocess_image(file):
     img = Image.open(file).convert("RGB")
     img = img.resize((224, 224))
     img = np.array(img) / 255.0
-    img = np.expand_dims(img, axis=-1)
     img = np.expand_dims(img, axis=0)
     return img
 
@@ -144,4 +183,15 @@ def predict(path):
     result = model.predict(img)
     print(result)
 
+def risk_bucket(p: float):
+    if p <= 0.33:
+        return "low"
+    elif p <= 0.66:
+        return "moderate"
+    else:
+        return "high"
+
 # predict("../ml/data/MildDemented/0a0a0acd-8bd8-4b79-b724-cc5711e83bc7.jpg")
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

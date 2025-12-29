@@ -9,31 +9,26 @@ const Step4Form = ({ formData, onChange }: Props) => {
       <h2 className="text-2xl text-text-primary font-semibold mb-6">
         Step 4: Upload MRI Scan
       </h2>
-      {/* Conditionally render the selected image if it exists */}
       {formData.mriScan && (
         <div>
-          {/* Display the selected image */}
           <img
-            alt="not found"
-            width={"250px"}
+            alt="Image not found"
             src={URL.createObjectURL(formData.mriScan)}
+            className="w-full"
           />
-          <br /> <br />
-          {/* Button to remove the selected image */}
-          <button onClick={() => onChange("mriScan", null)}>Remove</button>
+          <button
+            onClick={() => onChange("mriScan", null)}
+            className="btn-primary"
+          >
+            Remove
+          </button>
         </div>
       )}
-
-      <br />
-
-      {/* Input element to select an image file */}
       <input
         type="file"
         name="myImage"
-        // Event handler to capture file selection and update the state
-        onChange={(event) => {
-          console.log(event.target.files[0]); // Log the selected file
-          onChange("mriScan", event.target.files[0]); // Update the state with the selected file
+        onChange={(e) => {
+          onChange("mriScan", e.target.files[0]);
         }}
       />
     </div>
