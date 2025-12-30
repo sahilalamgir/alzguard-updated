@@ -35,7 +35,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-model = tf.keras.models.load_model("../ml/models/cnn_from_scratch.keras")
+BASE_DIR = Path(__file__).resolve().parent
+
+MODEL_PATH = BASE_DIR.parent / "ml" / "models" / "cnn_fom_scratch.keras"
+
+if not MODEL_PATH.exists():
+    raise FileNotFoundError(f"Model not found at {MODEL_PATH}")
+
+model = tf.keras.models.load_model(str(MODEL_PATH))
+logger.info(f"Model loaded from {MODEL_PATH}")
 
 @app.post("/assess-risk")
 async def assess_risk(
