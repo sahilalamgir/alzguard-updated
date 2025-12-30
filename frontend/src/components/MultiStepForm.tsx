@@ -9,7 +9,7 @@ import { AssessmentFormData } from "../types/form";
 interface Props {
   currentStep: number;
   formData: AssessmentFormData;
-  isCurrentStepValid: () => boolean;
+  isStepValid: (step: number, data: AssessmentFormData) => boolean;
   onNext: (e: React.MouseEvent) => void;
   onBack: () => void;
   onChange: <K extends keyof AssessmentFormData>(
@@ -27,7 +27,7 @@ interface Props {
 const MultiStepForm = ({
   currentStep,
   formData,
-  isCurrentStepValid,
+  isStepValid,
   onNext,
   onBack,
   onChange,
@@ -68,7 +68,7 @@ const MultiStepForm = ({
           <button
             type="button"
             onClick={(e) => onNext(e)}
-            disabled={!isCurrentStepValid()}
+            disabled={!isStepValid(currentStep, formData)}
             className="btn-primary disabled:bg-slate-300 disabled:text-slate-600 disabled:cursor-not-allowed disabled:opacity-60"
           >
             Next

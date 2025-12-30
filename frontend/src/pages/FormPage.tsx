@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MultiStepForm from "../components/MultiStepForm";
+import { isStepValid } from "../validators/formValidation";
 import { AssessmentFormData, AssessmentResult } from "../types/form";
 import { API_ENDPOINTS } from "../config/api";
 
@@ -54,40 +55,6 @@ const FormPage = () => {
     } else {
       setFormData((prev) => ({ ...prev, [field]: [...prev[field], value] }));
     }
-  };
-
-  const isCurrentStepValid = () => {
-    return (
-      (currentStep === 1 && isStep1Valid()) ||
-      (currentStep === 2 && isStep2Valid()) ||
-      (currentStep === 3 && isStep3Valid()) ||
-      (currentStep === 4 && isStep4Valid())
-    );
-  };
-
-  const isStep1Valid = () => {
-    return !(
-      formData.age === null ||
-      formData.sex === "" ||
-      formData.educationLevel === "" ||
-      formData.primaryLanguage === ""
-    );
-  };
-
-  const isStep2Valid = () => {
-    return !(formData.familyHistory === "" || formData.smokingHistory === "");
-  };
-
-  const isStep3Valid = () => {
-    return !(
-      formData.memoryIssues === "" ||
-      formData.conversationalIssues === "" ||
-      formData.misplacementIssues === ""
-    );
-  };
-
-  const isStep4Valid = () => {
-    return !(formData.mriScan === null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -183,7 +150,7 @@ const FormPage = () => {
       <MultiStepForm
         currentStep={currentStep}
         formData={formData}
-        isCurrentStepValid={isCurrentStepValid}
+        isStepValid={isStepValid}
         onNext={handleNext}
         onBack={handleBack}
         onChange={handleChange}
