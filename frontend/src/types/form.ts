@@ -14,7 +14,7 @@ export interface AssessmentFormData {
   // Step 2 - Health
   familyHistory: "immediate" | "extended" | "none" | "unknown" | "";
   conditionHistory: Array<
-    "hypertension" | "diabetes" | "stroke" | "high cholesterol"
+    "hypertension" | "diabetes" | "stroke" | "highCholesterol"
   >;
   smokingHistory: "never" | "former" | "current" | "";
 

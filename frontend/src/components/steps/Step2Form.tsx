@@ -85,16 +85,16 @@ const Step2Form = ({ formData, onChange, onCheckboxChange }: Props) => {
         <div>
           <input
             type="checkbox"
-            id="high cholesterol"
-            name="high cholesterol"
-            value="high cholesterol"
+            id="highCholesterol"
+            name="highCholesterol"
+            value="highCholesterol"
             onChange={() =>
-              onCheckboxChange("conditionHistory", "high cholesterol")
+              onCheckboxChange("conditionHistory", "highCholesterol")
             }
-            checked={formData.conditionHistory.includes("high cholesterol")}
+            checked={formData.conditionHistory.includes("highCholesterol")}
             className="form-checkbox"
           ></input>
-          <label htmlFor="high cholesterol">High cholesterol</label>
+          <label htmlFor="highCholesterol">High cholesterol</label>
         </div>
       </fieldset>
 

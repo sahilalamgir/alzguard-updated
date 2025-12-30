@@ -1,10 +1,23 @@
-from typing import List, Annotated
-from fastapi import FastAPI, File, Form, UploadFile
+from typing import List, Annotated, Literal
+from fastapi import FastAPI, File, Form, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import tensorflow as tf
 import numpy as np
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 import uvicorn
+from io import BytesIO
+from pathlib import Path
+
+LABELS = ["Mild", "Moderate", "None", "Very Mild"]
+RISK_WEIGHTS = {
+    "NonDemented": 0.0,
+    "VeryMildDemented": 0.33,
+    "MildDemented": 0.66,
+    "ModerateDemented": 1.0
+}
+MAX_FILE_SIZE = 10 * 1024 * 1024
+ALLOWED_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif'}
+ALLOWED_MIME_TYPES = {'image/jpeg', 'image/png', 'image/gif'}
 
 app = FastAPI()
 app.add_middleware(
@@ -17,28 +30,56 @@ app.add_middleware(
 
 model = tf.keras.models.load_model("../ml/models/cnn_from_scratch.keras")
 
-LABELS = ["Mild", "Moderate", "None", "Very Mild"]
-RISK_WEIGHTS = {
-    "NonDemented": 0.0,
-    "VeryMildDemented": 0.33,
-    "MildDemented": 0.66,
-    "ModerateDemented": 1.0
-}
-
 @app.post("/assess-risk")
-def assess_risk(
-    age: int = Form(...),
-    sex: str = Form(...),
-    educationLevel: str = Form(...),
-    primaryLanguage: str = Form(...),
-    familyHistory: str = Form(...),
-    conditionHistory: Annotated[List[str], Form()] = [],
-    smokingHistory: str = Form(...),
-    memoryIssues: str = Form(...),
-    conversationalIssues: str = Form(...),
-    misplacementIssues: str = Form(...),
-    mriScan: UploadFile = File(...)
+async def assess_risk(
+    age: Annotated[int, Form(ge=0, le=120)],
+    sex: Annotated[Literal["male", "female", "unspecified"], Form()],
+    educationLevel: Annotated[Literal["lessThanHighSchool", "highSchool", "undergraduate", "graduate"], Form()],
+    primaryLanguage: Annotated[Literal["english", "french", "spanish"], Form()],
+    familyHistory: Annotated[Literal["immediate", "extended", "none", "unknown"], Form()],
+    smokingHistory: Annotated[Literal["never", "former", "current"], Form()],
+    memoryIssues: Annotated[Literal["never", "sometimes", "often", "always"], Form()],
+    conversationalIssues: Annotated[Literal["never", "sometimes", "often", "always"], Form()],
+    misplacementIssues: Annotated[Literal["never", "sometimes", "often", "always"], Form()],
+    mriScan: UploadFile = File(...),
+    conditionHistory: Annotated[List[Literal["hypertension", "diabetes", "stroke", "highCholesterol"]], Form()] = [],
 ):
+    if not mriScan.filename:
+        raise HTTPException(status_code=400, detail="No file provided")
+    
+    file_ext = Path(mriScan.filename).suffix.lower()
+    if file_ext not in ALLOWED_EXTENSIONS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid file type '{file_ext}'. Allowed: {', '.join(ALLOWED_EXTENSIONS)}"
+        )
+    
+    if mriScan.content_type not in ALLOWED_MIME_TYPES:
+        raise HTTPException(status_code=400, detail=f"Invalid content type '{mriScan.content_type}'. Expected image file.")
+    
+    contents = await mriScan.read(MAX_FILE_SIZE + 1)
+    if len(contents) > MAX_FILE_SIZE:
+        raise HTTPException(
+            status_code=413,
+            detail=f"File too large. Maximum size: {MAX_FILE_SIZE / 1024 / 1024}MB"
+        )
+
+    try:
+        img = Image.open(BytesIO(contents))
+        img.verify()
+        img = Image.open(BytesIO(contents))
+    except UnidentifiedImageError:
+        raise HTTPException(
+            status_code=400,
+            detail="File is not a valid image"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid image file: {str(e)}"
+        )
+
+
     form_data = {
         "age": age,
         "sex": sex,
@@ -53,7 +94,7 @@ def assess_risk(
     }
 
     clinical_score = calculate_score(form_data)
-    preprocessed_img = preprocess_image(mriScan.file)
+    preprocessed_img = preprocess_image(img)
     mri_prediction = model.predict(preprocessed_img)[0]
     print(f"Clinical score: {clinical_score}")
     print(f"MRI prediction: {mri_prediction}")
@@ -84,8 +125,8 @@ def assess_risk(
         "risk": risk
     }
 
-def preprocess_image(file):
-    img = Image.open(file).convert("RGB")
+def preprocess_image(img: Image.Image):
+    img = img.convert("RGB")
     img = img.resize((224, 224))
     img = np.array(img) / 255.0
     img = np.expand_dims(img, axis=0)
@@ -141,7 +182,7 @@ def calculate_score(form_data: dict) -> float:
         cardio_score += 0.15
     if "stroke" in cardiovascular:
         cardio_score += 0.30
-    if "high cholesterol" in cardiovascular:
+    if "highCholesterol" in cardiovascular:
         cardio_score += 0.10
     cardio_score = min(cardio_score, 1.0)
 
