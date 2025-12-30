@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MultiStepForm from "../components/MultiStepForm";
 import { isStepValid } from "../validators/formValidation";
-import { AssessmentFormData, AssessmentResult } from "../types/form";
-import { API_ENDPOINTS } from "../config/api";
+import { AssessmentFormData } from "../types/form";
+import { submitAssessment } from "../services/api";
 
 const FormPage = () => {
   const navigate = useNavigate();
@@ -66,49 +66,9 @@ const FormPage = () => {
     setError(null);
 
     try {
-      if (formData.age === null) {
-        throw new Error("Age is required");
-      }
-      if (formData.mriScan === null) {
-        throw new Error("MRI scan is required");
-      }
-
-      const finalFormData = new FormData();
-      finalFormData.append("age", formData.age.toString());
-      finalFormData.append("sex", formData.sex);
-      finalFormData.append("educationLevel", formData.educationLevel);
-      finalFormData.append("primaryLanguage", formData.primaryLanguage);
-      finalFormData.append("familyHistory", formData.familyHistory);
-      for (const condition of formData.conditionHistory) {
-        finalFormData.append("conditionHistory", condition);
-      }
-      finalFormData.append("smokingHistory", formData.smokingHistory);
-      finalFormData.append("memoryIssues", formData.memoryIssues);
-      finalFormData.append(
-        "conversationalIssues",
-        formData.conversationalIssues
-      );
-      finalFormData.append("misplacementIssues", formData.misplacementIssues);
-      finalFormData.append("mriScan", formData.mriScan);
-      const response = await fetch(API_ENDPOINTS.assessRisk, {
-        method: "POST",
-        body: finalFormData,
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Server error (${response.status}): ${errorText}`);
-      }
-
-      let data: AssessmentResult;
-      try {
-        data = await response.json();
-      } catch (parseError) {
-        throw new Error("Invalid response from server");
-      }
-
+      const result = await submitAssessment(formData);
       navigate("/results", {
-        state: data,
+        state: result,
       });
     } catch (err) {
       if (err instanceof TypeError && err.message == "Failed to fetch") {
