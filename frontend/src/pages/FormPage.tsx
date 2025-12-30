@@ -11,13 +11,13 @@ const FormPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState<AssessmentFormData>({
     // Step 1: About You
-    age: null, // ← null when empty, not ""
+    age: null,
     sex: "",
     educationLevel: "",
     primaryLanguage: "",
     // Step 2: Health Background
     familyHistory: "",
-    conditionHistory: [], // ← Don't need "as string[]" anymore, type is inferred!
+    conditionHistory: [],
     smokingHistory: "",
     // Step 3: Cognitive Experience
     memoryIssues: "",
@@ -35,7 +35,6 @@ const FormPage = () => {
 
   const handleBack = () => setCurrentStep((prev) => prev - 1);
 
-  // Type-safe change handler - no more 'any'!
   const handleChange = <K extends keyof AssessmentFormData>(
     field: K,
     value: AssessmentFormData[K]
@@ -43,7 +42,6 @@ const FormPage = () => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Type-safe checkbox handler - only works with conditionHistory
   const handleCheckboxChange = (
     field: "conditionHistory",
     value: AssessmentFormData["conditionHistory"][number]
@@ -57,6 +55,7 @@ const FormPage = () => {
       setFormData((prev) => ({ ...prev, [field]: [...prev[field], value] }));
     }
   };
+
   const isCurrentStepValid = () => {
     return (
       (currentStep === 1 && isStep1Valid()) ||
@@ -65,6 +64,7 @@ const FormPage = () => {
       (currentStep === 4 && isStep4Valid())
     );
   };
+
   const isStep1Valid = () => {
     return !(
       formData.age === null ||
@@ -73,9 +73,11 @@ const FormPage = () => {
       formData.primaryLanguage === ""
     );
   };
+
   const isStep2Valid = () => {
     return !(formData.familyHistory === "" || formData.smokingHistory === "");
   };
+
   const isStep3Valid = () => {
     return !(
       formData.memoryIssues === "" ||
@@ -83,9 +85,11 @@ const FormPage = () => {
       formData.misplacementIssues === ""
     );
   };
+
   const isStep4Valid = () => {
     return !(formData.mriScan === null);
   };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isSubmitting) {
@@ -95,7 +99,6 @@ const FormPage = () => {
     setError(null);
 
     try {
-      // Validate required fields before sending (belt and suspenders)
       if (formData.age === null) {
         throw new Error("Age is required");
       }
@@ -104,7 +107,6 @@ const FormPage = () => {
       }
 
       const finalFormData = new FormData();
-      // Convert age to string explicitly - FormData.append only takes string | Blob
       finalFormData.append("age", formData.age.toString());
       finalFormData.append("sex", formData.sex);
       finalFormData.append("educationLevel", formData.educationLevel);
@@ -137,8 +139,6 @@ const FormPage = () => {
       } catch (parseError) {
         throw new Error("Invalid response from server");
       }
-
-      console.log(data);
 
       navigate("/results", {
         state: data,
