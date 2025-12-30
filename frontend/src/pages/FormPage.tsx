@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MultiStepForm from "../components/MultiStepForm";
 import { AssessmentFormData, AssessmentResult } from "../types/form";
+import { API_ENDPOINTS } from "../config/api";
 
 const FormPage = () => {
   const navigate = useNavigate();
@@ -10,13 +11,13 @@ const FormPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState<AssessmentFormData>({
     // Step 1: About You
-    age: null,  // ← null when empty, not ""
+    age: null, // ← null when empty, not ""
     sex: "",
     educationLevel: "",
     primaryLanguage: "",
     // Step 2: Health Background
     familyHistory: "",
-    conditionHistory: [],  // ← Don't need "as string[]" anymore, type is inferred!
+    conditionHistory: [], // ← Don't need "as string[]" anymore, type is inferred!
     smokingHistory: "",
     // Step 3: Cognitive Experience
     memoryIssues: "",
@@ -120,7 +121,7 @@ const FormPage = () => {
       );
       finalFormData.append("misplacementIssues", formData.misplacementIssues);
       finalFormData.append("mriScan", formData.mriScan);
-      const response = await fetch("http://127.0.0.1:8000/assess-risk", {
+      const response = await fetch(API_ENDPOINTS.assessRisk, {
         method: "POST",
         body: finalFormData,
       });
