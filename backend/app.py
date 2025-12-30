@@ -7,6 +7,13 @@ from PIL import Image, UnidentifiedImageError
 import uvicorn
 from io import BytesIO
 from pathlib import Path
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
 
 LABELS = ["Mild", "Moderate", "None", "Very Mild"]
 RISK_WEIGHTS = {
@@ -44,21 +51,33 @@ async def assess_risk(
     mriScan: UploadFile = File(...),
     conditionHistory: Annotated[List[Literal["hypertension", "diabetes", "stroke", "highCholesterol"]], Form()] = [],
 ):
+    logger.info(f"Assessment received for age {age}")
+
     if not mriScan.filename:
-        raise HTTPException(status_code=400, detail="No file provided")
+        logger.warning(f"Invalid image upload attempt: {mriScan.filename}")
+        raise HTTPException(
+            status_code=400,
+            detail="No file provided"
+        )
     
     file_ext = Path(mriScan.filename).suffix.lower()
     if file_ext not in ALLOWED_EXTENSIONS:
+        logger.warning(f"Invalid file extension: {file_ext}")
         raise HTTPException(
             status_code=400,
             detail=f"Invalid file type '{file_ext}'. Allowed: {', '.join(ALLOWED_EXTENSIONS)}"
         )
     
     if mriScan.content_type not in ALLOWED_MIME_TYPES:
-        raise HTTPException(status_code=400, detail=f"Invalid content type '{mriScan.content_type}'. Expected image file.")
+        logger.warning(f"Invalid MIME type: {mriScan.content_type}")
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid content type '{mriScan.content_type}'. Expected image file."
+        )
     
     contents = await mriScan.read(MAX_FILE_SIZE + 1)
     if len(contents) > MAX_FILE_SIZE:
+        logger.warning(f"Uploaded file too large: {len(contents) / 1024 / 1024}MB")
         raise HTTPException(
             status_code=413,
             detail=f"File too large. Maximum size: {MAX_FILE_SIZE / 1024 / 1024}MB"
@@ -69,16 +88,17 @@ async def assess_risk(
         img.verify()
         img = Image.open(BytesIO(contents))
     except UnidentifiedImageError:
+        logger.warning(f"Invalid image upload attempt: {mriScan.filename}")
         raise HTTPException(
             status_code=400,
             detail="File is not a valid image"
         )
     except Exception as e:
+        logger.warning(f"General exception occurred: {str(e)}")
         raise HTTPException(
             status_code=400,
             detail=f"Invalid image file: {str(e)}"
         )
-
 
     form_data = {
         "age": age,
@@ -93,11 +113,15 @@ async def assess_risk(
         "misplacementIssues": misplacementIssues
     }
 
+    logger.debug(f"Form data: {form_data}")
+
     clinical_score = calculate_score(form_data)
     preprocessed_img = preprocess_image(img)
     mri_prediction = model.predict(preprocessed_img)[0]
-    print(f"Clinical score: {clinical_score}")
-    print(f"MRI prediction: {mri_prediction}")
+
+    logger.debug(f"Clinical score: {clinical_score}")
+    logger.debug(f"MRI prediction: {mri_prediction}")
+
     cnn_confidence = max(mri_prediction)
     cnn_score = (
         mri_prediction[0] * RISK_WEIGHTS["MildDemented"] +
@@ -107,14 +131,11 @@ async def assess_risk(
     )
     final_score = 0.7 * cnn_score + 0.3 * clinical_score
     risk = risk_bucket(final_score)
-    print({
-        "labels": LABELS,
-        "probabilities": mri_prediction,
-        "predicted_label": LABELS[np.argmax(mri_prediction)],
-        "confidence": cnn_confidence,
-        "final_score": final_score,
-        "risk": risk
-    })
+
+    logger.debug(f"CNN confidence: {cnn_confidence}")
+    logger.debug(f"CNN score: {cnn_score}")
+    logger.debug(f"Final score: {final_score}")
+    logger.debug(f"Risk level: {risk}")
 
     return {
         "labels": LABELS,
@@ -238,12 +259,6 @@ def calculate_score(form_data: dict) -> float:
 
     return clinical_score
 
-def predict(path):
-    print("doing my thang")
-    img = preprocess_image(path)
-    result = model.predict(img)
-    print(result)
-
 def risk_bucket(p: float):
     if p <= 0.33:
         return "low"
@@ -251,8 +266,6 @@ def risk_bucket(p: float):
         return "moderate"
     else:
         return "high"
-
-# predict("../ml/data/MildDemented/0a0a0acd-8bd8-4b79-b724-cc5711e83bc7.jpg")
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
