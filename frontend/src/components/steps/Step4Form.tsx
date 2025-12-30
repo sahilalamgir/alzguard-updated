@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { AssessmentFormData } from "../../types/form";
 
 interface Props {
@@ -9,19 +10,31 @@ interface Props {
 }
 
 const Step4Form = ({ formData, onChange }: Props) => {
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (formData.mriScan) {
+      const url = URL.createObjectURL(formData.mriScan);
+      setPreviewUrl(url);
+
+      return () => {
+        URL.revokeObjectURL(url);
+      };
+    } else {
+      setPreviewUrl(null);
+    }
+  }, [formData.mriScan]);
+
   return (
     <div>
       <h2 className="text-2xl text-text-primary font-semibold mb-6">
         Step 4: Upload MRI Scan
       </h2>
-      {formData.mriScan && (
+      {previewUrl && (
         <div>
-          <img
-            alt="Image not found"
-            src={URL.createObjectURL(formData.mriScan)}
-            className="w-full"
-          />
+          <img alt="MRI Scan Preview" src={previewUrl} className="w-full" />
           <button
+            type="button"
             onClick={() => onChange("mriScan", null)}
             className="btn-primary"
           >
@@ -31,7 +44,6 @@ const Step4Form = ({ formData, onChange }: Props) => {
       )}
       <input
         type="file"
-        name="myImage"
         accept="image/*"
         onChange={(e) => {
           const file = e.target.files?.[0];
