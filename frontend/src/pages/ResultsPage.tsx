@@ -1,10 +1,16 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, Navigate } from "react-router-dom";
 import StageProbabilityChart from "../components/StageProbabilityChart";
 import { capitalizeFirstLetter } from "../utils/string";
+import { AssessmentResult } from "../types/form";
 
 const ResultsPage = () => {
   const location = useLocation();
-  const result = location.state;
+  const result = location.state as AssessmentResult | null;
+
+  if (!result) {
+    return <Navigate to="/" replace />;
+  }
+
   const data = result.labels.map((label: string, index: number) => {
     return { label, probability: result.probabilities[index] };
   });
